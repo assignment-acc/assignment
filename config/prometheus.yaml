@@ -1,0 +1,12 @@
+---
+nodeExporter:
+  enabled: false
+pushgateway:
+  enabled: false
+server:
+  service:
+    servicePort: 9090
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    enabled: true

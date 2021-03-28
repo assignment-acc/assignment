@@ -1,0 +1,50 @@
+---
+image:
+  tag: 7.5.1
+ingress:
+  enabled: true
+annotations:
+  kubernetes.io/ingress.class: nginx
+service:
+  port: 3000
+sidecar:
+  dashboards:
+    enabled: true
+  notifiers:
+    enabled: true
+notifiers:
+  notifiers.yaml:
+    notifiers:
+    - name: E-Mail
+      type: email
+      uid: email1
+      org_id: 1
+      is_default: true
+      settings:
+        addresses: no@email.com
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+    - name: 'default'
+      orgId: 1
+      folder: ''
+      type: file
+      disableDeletion: false
+      editable: true
+      options:
+        path: /var/tmp
+dashboards:
+  default:
+    assignment:
+      file: grafana-dashboard.json
+      datasource: Prometheus
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server:9090
+      access: proxy
+      isDefault: true

@@ -1,0 +1,28 @@
+---
+# Based on https://github.com/kubernetes/ingress-nginx/blob/master/hack/generate-deploy-scripts.sh#L128-L149 to support kind:
+controller:
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  hostPort:
+    enabled: true
+  terminationGracePeriodSeconds: 0
+  service:
+    type: NodePort
+  nodeSelector:
+    ingress-ready: "true"
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Equal"
+      effect: "NoSchedule"
+  publishService:
+    enabled: false
+  extraArgs:
+    publish-status-address: localhost
+  metrics:
+      enabled: true
+      service:
+        annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "10254"
