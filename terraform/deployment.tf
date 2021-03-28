@@ -99,7 +99,7 @@ resource "helm_release" "grafana" {
     value = var.grafana_password
   }
   set {
-    name = "grafana.ini.server.root_url"
+    name  = "grafana.ini.server.root_url"
     value = format("http://{grafana%s}", var.dns_zone)
   }
   namespace = kubernetes_namespace.infrastructure.id
@@ -118,4 +118,21 @@ resource "helm_release" "prometheus" {
     value = format("{prometheus%s}", var.dns_zone)
   }
   namespace = kubernetes_namespace.infrastructure.id
+}
+
+# Dashboards:
+resource "kubernetes_config_map" "grafana-dashboards-istio" {
+  metadata {
+    name      = "grafana-dashboard"
+    namespace = kubernetes_namespace.infrastructure.id
+    labels = {
+      grafana_dashboard = 1
+    }
+    annotations = {
+      k8s-sidecar-target-directory = "/tmp/dashboards/"
+    }
+  }
+  data = {
+    "default.json" = file(format("%s/../config/%s", path.root, "grafana-dashboard.json"))
+  }
 }
