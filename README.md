@@ -36,7 +36,6 @@ The provided Terraform configuration supports a number of variables to customize
 | `deploy_ingress_nginx`       | Whether the Nginx-based ingress should be deployed to the cluster | `true`
 
 
-
 You can set the parameters by passing `-var name=value` to `terraform apply` command or using any other method defined in [official Terraform documentation](https://www.terraform.io/docs/language/values/variables.html#assigning-values-to-root-module-variables).
 
 ## Deploying
@@ -48,6 +47,21 @@ You can set the parameters by passing `-var name=value` to `terraform apply` com
 1. Confirm the generated Terraform plan is valid.
 1. Type `Yes` to deploy.
 
+In addition, if the application is deployed locally, the current DNS server or local `/etc/hosts` file, should have the following (assuming Kuberentes cluster is running on localhost) records, so the applications are easy accessible:
+
+- `127.0.0.1 grafana.assignment.local`
+- `127.0.0.1 prometheus.assignment.local`
+- `127.0.0.1 juice-shop.assignment.local`
+
+## Using
+
+Asuming the application was deployed with `dns_zone` set to `.assignment.local`, the applications can be accessed as following:
+
+- **Juice Shop**: [https://juice-shop.assignment.local](https://juice-shop.assignment.local)
+- **Prometheus**: [http://prometheus.assignment.local](http://prometheus.assignment.local)
+- **Grafana**: [http://grafana.assignment.local](http://grafana.assignment.local)
+
+The Grafana instance should alrready be preloaded with Prometheus datasource and a default `Juice-Shop Dashboard` dashboard to view key metrics for Juice Shope.
 
 ## Known limitations
 
